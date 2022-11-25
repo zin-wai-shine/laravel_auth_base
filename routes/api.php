@@ -29,6 +29,8 @@ Route::prefix('v1')->group(function(){
 
         Route::resource('category', \App\Http\Controllers\CategoryController::class);
 
+        Route::resource('sub-category', \App\Http\Controllers\SubCategoryController::class);
+
     });
 });
 

@@ -2,11 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Models\SubCategory;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Psy\Util\Str;
 
-class CategoryResource extends JsonResource
+class SubCategoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,11 +15,10 @@ class CategoryResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id'    =>$this->id,
-            'name'  => $this->name,
-            'slug'  => $this->slug,
-            'creator'=> new UserResource($this->user),
-            'sub_category' => SubCategoryResource::collection($this->subCategories),
+            'id' => $this->id,
+            'name' => $this->name,
+            'category_id' => $this->category_id,
+            'user_id' => $this->user_id,
             'date'  => $this->created_at->format('d/M/Y'),
             'time'  => $this->created_at->format('h:i:s A')
         ];

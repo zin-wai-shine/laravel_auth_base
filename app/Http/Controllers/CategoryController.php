@@ -7,7 +7,6 @@ use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\User;
-use http\Env\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -15,6 +14,12 @@ use function PHPUnit\Framework\isEmpty;
 
 class CategoryController extends Controller
 {
+
+    public function allowUser(){
+        if(Gate::denies('allowUser',Category::class)){
+            return response()->json(['message' => 'user is not allowed']);
+        };
+    }
 
     public function index()
     {
@@ -24,9 +29,7 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        if(Gate::denies('allowUser',Category::class)){
-            return response()->json(['message' => 'user is not allowed']);
-        };
+        $this->allowUser();
 
         $category = new Category();
         $category->name = $request->name;
@@ -34,14 +37,18 @@ class CategoryController extends Controller
         $category->user_id = Auth::id();
         $category->save();
 
-        return response()->json(['message' => 'category was created']);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'category was created' ,
+                'data'=> new CategoryResource($category)
+            ]
+        );
     }
 
     public function show($id)
     {
-        if(Gate::denies('allowUser',Category::class)){
-            return response()->json(['message' => 'user is not allowed']);
-        };
+        $this->allowUser();
 
         $category = Category::find($id);
         if(is_null($category)){
@@ -52,9 +59,7 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, $id)
     {
-        if(Gate::denies('allowUser',Category::class)){
-            return response()->json(['message' => 'user is not allowed']);
-        };
+        $this->allowUser();
 
         $category = Category::find($id);
         if(is_null($category)){
@@ -64,22 +69,26 @@ class CategoryController extends Controller
         $category->slug = Str::slug($request->name);
         $category->user_id = Auth::id();
         $category->update();
-        return response()->json(['message' => 'category was updated']);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'category was updated',
+                'data' => new CategoryResource($category)
+            ]
+        );
     }
 
 
     public function destroy($id)
     {
-        if(Gate::denies('allowUser',Category::class)){
-            return response()->json(['message' => 'user is not allowed']);
-        };
+        $this->allowUser();
 
         $category = Category::find($id);
         if(is_null($category)){
             return response()->json(['message' => 'category not found']);
         }
         $category->delete();
-        return response()->json(['message' => 'category was deleted'], 204);
+        return response()->json(['message' => 'category was deleted'], 200);
     }
 
 }
