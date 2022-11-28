@@ -111,9 +111,13 @@ class UserController extends Controller
         if(is_null($user)){
             return response()->json(['message'=> 'user not found'], 404);
         }
-
         $user->delete();
-        return response()->json(['message'=>'user was deleted'], 200);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'user was deleted' ,
+            ],200
+        );
     }
 
 }

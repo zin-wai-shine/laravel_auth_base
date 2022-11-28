@@ -9,6 +9,7 @@ use App\Http\Resources\SubCategoryResource;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Faker\Core\Number;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
@@ -88,6 +89,11 @@ class SubCategoryController extends Controller
             return response()->json(['message' => 'subCategory not found']);
         };
         $subCategory->delete();
-        return response()->json(['message'=>'subCategory was deleted'], 200);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'subCategory was deleted' ,
+            ],200
+        );
     }
 }
