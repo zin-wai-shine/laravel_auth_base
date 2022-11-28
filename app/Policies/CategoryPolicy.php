@@ -11,7 +11,7 @@ class CategoryPolicy
     use HandlesAuthorization;
 
     public function allowUser(User $user){
-        if($user->role === "0" || $user->role === "1"){
+        if($user->role == "0" || $user->role == "1"){
             return true;
         }
     }
@@ -19,7 +19,7 @@ class CategoryPolicy
 
     public function viewAny(User $user)
     {
-        return $user->role === "0" || $user->role === "1";
+
     }
 
     public function view(User $user, Category $category)

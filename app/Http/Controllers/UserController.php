@@ -10,6 +10,14 @@ use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
+
+    /*public function __construct()
+    {
+        if(Gate::denies("allowUser",User::class)){
+            return response()->json(["message" => "user was not allowed"]);
+        };
+    }*/
+
     public function index()
     {
         $users = User::search()->latest('id')->paginate(2)->withQueryString();

@@ -8,17 +8,13 @@ use App\Http\Resources\CategoryResource;
 use App\Http\Resources\SubCategoryResource;
 use App\Models\Category;
 use App\Models\SubCategory;
+use Faker\Core\Number;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 
 class SubCategoryController extends Controller
 {
-    public function allowUser(){
-        if(Gate::denies('allowUser',SubCategoryController::class)){
-            return response()->json(['message' => 'user is not allowed']);
-        };
-    }
 
     public function index()
     {
@@ -29,35 +25,69 @@ class SubCategoryController extends Controller
 
     public function store(StoreSubCategoryRequest $request)
     {
-        $this->allowUser();
+        if(Gate::denies('allowUser',SubCategory::class)){
+            return response()->json(['message' => 'you are not administrator or editor']);
+        };
+
         $subCategory = new SubCategory();
         $subCategory->name          = $request->name;
         $subCategory->slug          = Str::slug($subCategory->name);
         $subCategory->user_id       = Auth::id();
-        $subCategory->category_id   = $request->category_id;
+        $subCategory->category_id   = (float)$request->category_id;
         $subCategory->save();
-        return response()->json($subCategory);
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'subCategory was created' ,
+                'data'=> new SubCategoryResource($subCategory)
+            ]
+        );
     }
 
-    public function show(SubCategory $subCategory)
+    public function show($id)
     {
-        $this->allowUser();
+        $subCategory = SubCategory::find($id);
+        if(is_null($subCategory)){
+            return response()->json(['message' => 'subCategory not found']);
+        }
+        return new SubCategoryResource($subCategory);
+    }
+
+
+    public function update(UpdateSubCategoryRequest $request, $id)
+    {
+        if(Gate::denies('allowUser',SubCategory::class)){
+            return response()->json(['message' => 'you are not administrator or editor']);
+        };
+        $subCategory = SubCategory::find($id);
+        if(is_null($subCategory)){
+            return response()->json(['message' => 'subCategory not found']);
+        };
+        $subCategory->name          = $request->name;
+        $subCategory->slug          = Str::slug($subCategory->name);
+        $subCategory->user_id       = Auth::id();
+        $subCategory->update();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => 'subCategory was updated' ,
+                'data'=> new SubCategoryResource($subCategory)
+            ]
+        );
 
     }
 
-    public function edit(SubCategory $subCategory)
+    public function destroy($id)
     {
-        $this->allowUser();
-    }
-
-    public function update(UpdateSubCategoryRequest $request, SubCategory $subCategory)
-    {
-        $this->allowUser();
-    }
-
-    public function destroy(SubCategory $subCategory)
-    {
-        $this->allowUser();
-
+         if(Gate::denies('allowUser',SubCategory::class)){
+            return response()->json(['message' => 'you are not administrator or editor']);
+        };
+        $subCategory = SubCategory::find($id);
+        if(is_null($subCategory)){
+            return response()->json(['message' => 'subCategory not found']);
+        };
+        $subCategory->delete();
+        return response()->json(['message'=>'subCategory was deleted'], 200);
     }
 }

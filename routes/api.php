@@ -31,6 +31,8 @@ Route::prefix('v1')->group(function(){
 
         Route::resource('sub-category', \App\Http\Controllers\SubCategoryController::class);
 
+        Route::resource('product', \App\Http\Controllers\ProductController::class);
+
     });
 });
 

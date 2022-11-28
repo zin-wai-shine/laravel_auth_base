@@ -15,12 +15,6 @@ use function PHPUnit\Framework\isEmpty;
 class CategoryController extends Controller
 {
 
-    public function allowUser(){
-        if(Gate::denies('allowUser',Category::class)){
-            return response()->json(['message' => 'user is not allowed']);
-        };
-    }
-
     public function index()
     {
         $categories = Category::search()->latest('id')->paginate(2)->withQueryString();
@@ -29,8 +23,9 @@ class CategoryController extends Controller
 
     public function store(StoreCategoryRequest $request)
     {
-        $this->allowUser();
-
+        if(Gate::denies('allowUser',Category::class)){
+            return response()->json(['message' => 'you are not administrator or editor']);
+        };
         $category = new Category();
         $category->name = $request->name;
         $category->slug = Str::slug($category->name);
@@ -48,8 +43,6 @@ class CategoryController extends Controller
 
     public function show($id)
     {
-        $this->allowUser();
-
         $category = Category::find($id);
         if(is_null($category)){
             return response()->json(['message'=>'category not found']);
@@ -59,7 +52,9 @@ class CategoryController extends Controller
 
     public function update(UpdateCategoryRequest $request, $id)
     {
-        $this->allowUser();
+        if(Gate::denies('allowUser',Category::class)){
+            return response()->json(['message' => 'you are not administrator or editor']);
+        };
 
         $category = Category::find($id);
         if(is_null($category)){
@@ -81,7 +76,9 @@ class CategoryController extends Controller
 
     public function destroy($id)
     {
-        $this->allowUser();
+        if(Gate::denies('allowUser',Category::class)){
+            return response()->json(['message' => 'you are not administrator or editor']);
+        };
 
         $category = Category::find($id);
         if(is_null($category)){

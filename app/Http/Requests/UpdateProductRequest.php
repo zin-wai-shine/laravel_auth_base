@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateSubCategoryRequest extends FormRequest
+class UpdateProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateSubCategoryRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -24,8 +24,7 @@ class UpdateSubCategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:20|unique:sub_categories,name|unique:categories,name',
-            'category_id' => 'exists:categories,id'
+            //
         ];
     }
 }
