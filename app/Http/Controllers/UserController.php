@@ -55,11 +55,6 @@ class UserController extends Controller
             return response()->json(["message" => "user was not allowed", 404]);
         };
 
-        /*$request->validate([
-           'banned' => 'exists:users,banned',
-           'role' => 'exists:users,role'
-        ]);*/
-
         $user = User::find($id);
         if(is_null($user)){
             return response()->json(["message" => "user not found"], 404);

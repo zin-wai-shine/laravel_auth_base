@@ -21,9 +21,34 @@ class ProductResource extends JsonResource
         return $status;
     }
 
+    public function review($id){
+        $product = Product::find($id);
+        $reviews = $product->reviews;
+        $rate = [];
+        foreach ($reviews as $key=>$review){
+            # (float) represented string "1" returned to number 1;
+            $rate[$key] = (float)$review->rate;
+        }
+        $total_rate = array_sum($rate);
+        return $percentage_of_rate = round((($total_rate/3000)*100),1)."%";
+    }
+
     public function toArray($request)
     {
-        $featured_img_link = asset(Storage::url($this->featured_img));
+        if($this->featured_img == "default/shop.png"){
+            $featured_img_link = asset($this->featured_img);
+        }else{
+            $featured_img_link = asset(Storage::url($this->featured_img));
+        }
+
+
+        # (object) represented array [] return to object {};
+        $creator = (object)[
+            "id"=>$this->user->id,
+            "name"=>$this->user->name,
+            "role" => $this->user->role,
+        ];
+
         $category = (object)[
             "id"=>$this->category_id,
             "name"=>$this->category->name
@@ -34,6 +59,7 @@ class ProductResource extends JsonResource
             "name"=>$this->subCategory->name
         ];
 
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -42,13 +68,14 @@ class ProductResource extends JsonResource
             'price' => (float)$this->price,
             'stock' => (float)$this->stock,
             'stock_status' => $this->stockStatus((float)$this->stock),
+            'review_percentages' => $this->review($this->id),
             'featured_img' => $featured_img_link,
             'photos' => PhotoResource::collection($this->photos),
-            'user_id' => $this->user_id,
+            'creator' => $creator,
             'category' => $category,
             'sub_category' => $sub_category,
-            "date" => $this->created_at->format("d/M/Y"),
-            "time" => $this->created_at->format("H:i:s A"),
+            'date' => $this->created_at->format("d/M/Y"),
+            'time' => $this->created_at->format("H:i:s A"),
         ];
 
     }

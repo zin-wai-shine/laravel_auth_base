@@ -39,7 +39,7 @@ class AuthApiController extends Controller
         ]);
         if(Auth::attempt($request->only(["email","password"]))){
             $token = Auth::user()->createToken($request->email)->plainTextToken;
-            return response()->json(["message"=>"login was successfully", "token"=>$token]);
+            return response()->json(["message"=>"login was successfully", 'status'=>'success', "token"=>$token]);
         }
         return response()->json(["message"=>"User Not Found !"],401);
     }
@@ -62,6 +62,7 @@ class AuthApiController extends Controller
                 Auth::user()->tokens()->delete();
             }
         });
+
         /*return response()->json(["message"=>"logoutAllWithoutCurrentAccess successfully"]);*/
         return response()->json(['message'=> 'logout else devices'], 201);
     }

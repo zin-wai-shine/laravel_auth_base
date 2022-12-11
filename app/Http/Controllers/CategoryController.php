@@ -17,7 +17,7 @@ class CategoryController extends Controller
 
     public function index()
     {
-        $categories = Category::search()->latest('id')->paginate(2)->withQueryString();
+        $categories = Category::search()->latest('id')->paginate(10)->withQueryString();
         return CategoryResource::collection($categories);
     }
 

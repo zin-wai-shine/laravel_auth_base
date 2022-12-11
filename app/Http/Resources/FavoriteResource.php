@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubCategoryResource extends JsonResource
+class FavoriteResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,20 +14,22 @@ class SubCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        $creator = (object)[
+        $user = (object)[
             "id"=>$this->user->id,
             "name"=>$this->user->name,
-            "role" => $this->user->role,
+        ];
+
+        $product = (object)[
+            "id"=>$this->product->id,
+            "name"=>$this->product->name,
         ];
 
         return [
             'id' => $this->id,
-            'name' => $this->name,
-            'slug' => $this->slug,
-            'category_id' => $this->category_id,
-            'creator' => $creator,
-            'date'  => $this->created_at->format('d/M/Y'),
-            'time'  => $this->created_at->format('h:i:s A')
+            'user' => $user,
+            'product' => $product,
+            'date' => $this->created_at->format("d/M/Y"),
+            'time' => $this->created_at->format("H:i:s A"),
         ];
     }
 }

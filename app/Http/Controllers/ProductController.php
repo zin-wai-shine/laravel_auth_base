@@ -121,7 +121,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         if(is_null($product)){
-            return response()->json(['message' => 'product not found']);
+            return response()->json(['message' => 'product not found'], 201);
         }
         $product->delete();
         return response()->json(

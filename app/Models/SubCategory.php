@@ -15,4 +15,8 @@ class SubCategory extends Model
             $q->where("name","like","%$search%");
         });
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

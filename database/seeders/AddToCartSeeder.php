@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\SubCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class SubCategorySeeder extends Seeder
+class AddToCartSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +14,6 @@ class SubCategorySeeder extends Seeder
      */
     public function run()
     {
-        SubCategory::factory()->count(50)->create();
+        //
     }
 }

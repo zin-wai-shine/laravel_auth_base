@@ -3,9 +3,11 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 
 return new class extends Migration
 {
+
     /**
      * Run the migrations.
      *
@@ -20,7 +22,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('price');
             $table->string('stock');
-            $table->string('featured_img');
+            $table->string('featured_img')->default("default/shop.png");
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->constrained()->cascadeOnDelete();
             $table->foreignId('sub_category_id')->constrained()->cascadeOnDelete();

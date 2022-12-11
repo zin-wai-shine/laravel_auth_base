@@ -33,6 +33,15 @@ Route::prefix('v1')->group(function(){
 
         Route::resource('product', \App\Http\Controllers\ProductController::class);
 
+        Route::post('product/destroy-update-photos', [\App\Http\Controllers\ElseStatusController::class, "updateDeletePhotos"]);
+
+        Route::resource('review',\App\Http\Controllers\ReviewController::class);
+
+        Route::resource('favorite', \App\Http\Controllers\FavoriteController::class);
+
+        Route::resource('comment', \App\Http\Controllers\CommentController::class);
+
+        Route::resource('add-to-cart', \App\Http\Controllers\AddToCartController::class);
     });
 });
 

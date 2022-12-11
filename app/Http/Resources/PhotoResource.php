@@ -15,6 +15,12 @@ class PhotoResource extends JsonResource
      */
     public function toArray($request)
     {
-        return asset(Storage::url($this->name));
+        $photos = asset(Storage::url($this->name));
+        # Why we need to pass id in return?
+        # --> we need an id when we want to update our product photos, delete rejected photos and instead store new uploaded photos;
+        return [
+            'id' => $this->id,
+            'photo' => asset(Storage::url($photos))
+        ];
     }
 }
